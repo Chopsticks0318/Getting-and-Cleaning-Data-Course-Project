@@ -1,22 +1,15 @@
 library(data.table)
 library(dplyr)
 
-# create train dataset
+# creating train dataset
 
 a <- fread('train/X_train.txt')
-
 c <- fread('train/y_train.txt')
-
 d <- cbind(a, c)
-
 e <- fread('train/subject_train.txt')
-
 f <- cbind(e, d)
-
 f <- cbind(e, d)
-
 x <- read.table('features.txt', col.names = c('MeasureID', 'MeasureName'))
-
 names(f)[1:2] <- c('subject', 'activity')
 names(f)[3:563] <- as.character(x$MeasureName)
 
@@ -30,7 +23,7 @@ y <- f[, c(3, 4, 5, 6, 7, 8, 43, 44, 45, 46, 47, 48, 83, 84, 85, 86, 87, 88, 123
 
 dat_train <- cbind(f[,1:2], y)
 
-#create test dataset
+#creating test dataset
 b <- fread('test/X_test.txt')
 
 k <- fread('test/y_test.txt')
@@ -50,7 +43,7 @@ z <- n[, c(3, 4, 5, 6, 7, 8, 43, 44, 45, 46, 47, 48, 83, 84, 85, 86, 87, 88, 123
 
 dat_test <- cbind(n[,1:2], z)
 
-## join train and test datasets
+## joins
 
 full <- rbind(dat_train, dat_test)
 
@@ -77,7 +70,7 @@ cnames8 <- gsub("Acc", "Accelerator", cnames7)
 cnames9 <- gsub("Gyro", "Gyroscope", cnames8)
 colnames(new_full) <- cnames9
 
-## calculate average for each subject and activity
+## cal average for each subject and activity
 full_short <- select(new_full, -activityID)
 
 h <- full_short$activityName
@@ -94,6 +87,6 @@ m_data$value <- as.numeric(m_data$value)
 
 average <- dcast(m_data, subject + activity ~ variable, mean)
 
-## write new tidy file
+## write new file
 
 write.table(average, "tidy dataset.txt", quote = FALSE, row.names = FALSE)
